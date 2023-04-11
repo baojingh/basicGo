@@ -14,6 +14,7 @@ func main() {
 
 	m1 := make(map[string]int, 8)
 	m1["k1"] = 1
+	m1["k2"] = 2
 
 	fmt.Println("this is end")
 }
