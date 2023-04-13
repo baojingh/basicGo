@@ -1,6 +1,7 @@
 package router
 
 import (
+	"basicGo/web-server/handler"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func regHello(context *gin.Context) {
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	router.GET("/", regHello)
+	router.GET("/hello", regHello)
+	router.GET("/user/:name", handler.UserSave)
 	return router
 }
