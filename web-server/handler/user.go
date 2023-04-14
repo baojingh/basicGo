@@ -22,20 +22,35 @@ func UserSaveByQuery(context *gin.Context) {
 	context.String(http.StatusOK, "saved")
 }
 
+// func UserRegister(context *gin.Context) {
+// 	var user model.Usermodel
+// 	if err := context.ShouldBind(&user); err != nil {
+// 		fmt.Println("err ->", err.Error())
+// 		return
+// 	}
+// 	log.Println("#######", user.Email)
+// 	log.Println("#######", user.Password)
+// 	id := user.Save()
+// 	log.Println("#######", id)
+// 	context.Redirect(http.StatusMovedPermanently, "/")
+// }
+
 func UserRegister(context *gin.Context) {
-	var user model.Usermodel
-	if err := context.ShouldBind(&user); err != nil {
-		fmt.Println("err ->", err.Error())
-		return
+	user := model.User{}
+	if e := context.ShouldBind(&user); e == nil {
+		user.Save()
+		log.Println("user is ", user)
 	}
-	log.Println("#######", user.Email)
-	log.Println("#######", user.Password)
-	id := user.Save()
+	context.String(http.StatusOK, "result")
 
-	log.Println("#######", id)
+	// log.Println("receive data...........")
 
-	context.Redirect(http.StatusMovedPermanently, "/")
-
+	// user := model.User{Email: "xiaogouwangwang", Password: "111"}
+	// context.ShouldBindJSON(&user)
+	// user.Save()
+	// log.Println("user is ", user)
+	// log.Println("response..........")
+	// context.String(http.StatusOK, "{hello: ok}")
 }
 
 // func UserRegister(context *gin.Context) {

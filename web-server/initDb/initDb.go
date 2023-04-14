@@ -1,25 +1,42 @@
 package initDb
 
 import (
-	"database/sql"
-	"log"
-
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
-var Db *sql.DB
+var Db *gorm.DB
 
 func init() {
-	var err error
-	log.Println("start connect*************")
-	Db, err := sql.Open("mysql", "root:Hadoop.1qaz!QAZ@tcp(121.5.73.196:3306)/devops")
-	if err != nil {
-		log.Panicln("err to connect:", err.Error())
-	}
-	Db.SetMaxOpenConns(20)
-	Db.SetMaxIdleConns(20)
-	log.Println("finish connect*************")
+	var mydb_dsn = "root:Hadoop.1qaz!QAZ@tcp(121.5.73.196:3306)/devops"
+	Db, _ = gorm.Open(mysql.Open(mydb_dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 }
+
+// import (
+// 	"log"
+
+// 	"gorm.io/driver/mysql"
+// 	"gorm.io/gorm"
+// )
+
+// var Db *gorm.DB
+
+// func init() {
+// 	var err error
+// 	log.Println("start connect*************")
+// 	Db, err = gorm.Open("mysql", "root:Hadoop.1qaz!QAZ@tcp(121.5.73.196:3306)/devops")
+// 	if err != nil {
+// 		log.Panicln("err to connect:", err.Error())
+// 	}
+// 	log.Println("finish connect*************")
+// }
 
 // func init() {
 // 	var err error

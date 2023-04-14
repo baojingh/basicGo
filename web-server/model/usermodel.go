@@ -10,18 +10,19 @@ type Usermodel struct {
 	Password string `form:"password" binding: "password"`
 }
 
-func (user *Usermodel) Save() int64 {
+type User struct {
+	Id       int    `form:"id" 		example:"1"`
+	Email    string `form:"email" 	 example:"js"`
+	Password string `form:"password" example: "123"`
+}
+
+func (user User) Save() int {
 	log.Println("start save *************")
-
-	result, err := initDb.Db.Exec("insert into user(email, password) values (?, ?)", user.Email, user.Password)
-	if err != nil {
-		log.Panicln("user insert ")
-	}
-	id, err := result.LastInsertId()
-	if err != nil {
-		log.Panicln("insert err, cannot get id")
-	}
+	res := initDb.Db.Create(&user)
 	log.Println("finish save *************")
+	if res.Error != nil {
+		return 0
+	}
+	return 1
 
-	return id
 }
