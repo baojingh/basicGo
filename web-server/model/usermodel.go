@@ -17,12 +17,11 @@ type User struct {
 }
 
 func (user User) Save() int {
-	log.Println("start save *************")
 	res := initDb.Db.Create(&user)
-	log.Println("finish save *************")
 	if res.Error != nil {
 		return 0
 	}
+	log.Println("res from gorm is ", user)
 	return 1
 
 }

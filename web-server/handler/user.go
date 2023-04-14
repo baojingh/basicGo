@@ -42,26 +42,7 @@ func UserRegister(context *gin.Context) {
 		log.Println("user is ", user)
 	}
 	context.String(http.StatusOK, "result")
-
-	// log.Println("receive data...........")
-
-	// user := model.User{Email: "xiaogouwangwang", Password: "111"}
-	// context.ShouldBindJSON(&user)
-	// user.Save()
-	// log.Println("user is ", user)
-	// log.Println("response..........")
-	// context.String(http.StatusOK, "{hello: ok}")
 }
-
-// func UserRegister(context *gin.Context) {
-// 	var user model.Usermodel
-// 	if err := context.ShouldBind(&user); err != nil {
-// 		fmt.Println("err ->", err.Error())
-// 		return
-// 	}
-// 	log.Println("#######", user.Email)
-// 	log.Println("#######", user.Password)
-// }
 
 func Hello(context *gin.Context) {
 	context.String(http.StatusOK, "hello")
