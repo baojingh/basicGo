@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /**
   @Author   : bob
@@ -9,9 +11,23 @@ import "fmt"
   @Desc     :
 */
 
-func main() {
+type calType func(a int, b int) int
 
-	// https://juejin.cn/post/6970261780127809573
-	fmt.Println("hello")
-	fmt.Println("hello")
+func add(a int, b int) int {
+	return a + b
+}
+
+func multi(a int, b int) int {
+	return a * b
+}
+
+func cal(a int, b int, f calType) int {
+	return f(a, b)
+}
+
+func main() {
+	res := cal(1, 2, add)
+	fmt.Println(res)
+
+	fmt.Printf("############")
 }
