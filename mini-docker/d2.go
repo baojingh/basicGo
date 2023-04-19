@@ -11,7 +11,7 @@ func run() {
 	cmd := exec.Command(os.Args[2])
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall
+		Cloneflags: syscall.CLONE_NEWUTS,
 	}
 
 	cmd.Stdin = os.Stdin
@@ -32,9 +32,6 @@ func main() {
 	default:
 		panic("the arg is not defined")
 	}
-
-	var a = 2
-	fmt.Println(a)
 
 	fmt.Println("##############")
 
