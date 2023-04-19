@@ -4,16 +4,10 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"syscall"
 )
 
 func run() {
 	cmd := exec.Command(os.Args[2])
-
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall
-	}
-
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
