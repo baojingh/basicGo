@@ -18,7 +18,7 @@ func RunContainerInitProcess() error {
 		return fmt.Errorf("Run container get user command error, cmdArray is nil")
 	}
 
-	//setUpMount()
+	setUpMount()
 
 	path, err := exec.LookPath(cmdArray[0])
 	if err != nil {
@@ -56,11 +56,6 @@ func setUpMount() {
 	}
 	log.Infof("Current location is %s", pwd)
 	pivotRoot(pwd)
-
-	// https://github.com/xianlubird/mydocker/issues/41
-	// systemd 加入linux之后, mount namespace 就变成 shared by default, 所以你必须显示
-	// 声明你要这个新的mount namespace独立
-	syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
 
 	//mount proc
 	defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV
