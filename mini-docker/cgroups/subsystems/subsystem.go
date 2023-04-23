@@ -14,9 +14,7 @@ type Subsystem interface {
 }
 
 var (
-	SubsystemIns = []Subsystem{
-		&CpusetSubSystem{},
+	SubsystemsIns = []Subsystem{
 		&MemorySubSystem{},
-		&CpuSubSystem{},
 	}
 )
