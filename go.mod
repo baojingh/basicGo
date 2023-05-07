@@ -3,6 +3,7 @@ module basicGo
 go 1.19
 
 require (
+	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.2
