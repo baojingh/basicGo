@@ -23,6 +23,8 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+var msgChan = make(chan []byte, 128)
+
 func init() {
 	log.SetFormatter(&log.TextFormatter{
 		TimestampFormat:           "2006-01-02 15:04:05",
@@ -34,6 +36,7 @@ func init() {
 }
 
 func handleWebSocket(w http.ResponseWriter, r *http.Request) {
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Info("Failed to upgrade to WebSocket:", err)
@@ -42,25 +45,34 @@ func handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	log.Info("create websocket success")
 	defer conn.Close()
 
-	for {
-		messageLen, message, err := conn.ReadMessage()
-		if err != nil {
-			log.Info("Failed to read message from WebSocket:", err)
-			break
-		}
-		log.Infof("Server received message: %s", message)
+	// ws://127.0.0.1:8081/logs?id=111
+	// Get the container ID from the query parameter
+	containerId := r.URL.Query().Get("id")
+	log.Infof("get containerId from request, %s", containerId)
 
-		err = conn.WriteMessage(messageLen, message)
+	go func() {
+		for {
+			_, data, err := conn.ReadMessage()
+			if err != nil {
+				log.Info("fail to read data from client, ", err)
+				break
+			}
+			msgChan <- data
+		}
+	}()
+
+	for data := range msgChan {
+		err = conn.WriteMessage(websocket.TextMessage, data)
 		if err != nil {
-			log.Info("Failed to write message to WebSocket:", err)
+			log.Error("fal to send data to client, ", err)
 			break
 		}
-		log.Infof("Server send message: %s", message)
 	}
+
 }
 
 func main() {
-	http.HandleFunc("/ws", handleWebSocket)
+	http.HandleFunc("/logs", handleWebSocket)
 
 	log.Info("Starting server on port 8081...")
 	err := http.ListenAndServe(":8081", nil)
