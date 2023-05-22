@@ -2,7 +2,6 @@ package gows
 
 import (
 	"github.com/gorilla/websocket"
-	log "github.com/sirupsen/logrus"
 )
 
 /**
@@ -15,10 +14,6 @@ import (
 const (
 	// user connection timeout
 	heartbeatExpirationTime = 1 * 60
-)
-
-var (
-	clientManager = NewClientManager()
 )
 
 type Client struct {

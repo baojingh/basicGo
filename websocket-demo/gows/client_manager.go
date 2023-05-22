@@ -1,7 +1,6 @@
 package gows
 
 import (
-	log "github.com/sirupsen/logrus"
 	"sync"
 )
 
@@ -50,14 +49,52 @@ func (manager *ClientManager) EventRegister(client *Client) {
 	log.Info("register client success")
 }
 
+func (manager *ClientManager) EventUnregister(client *Client) {
+	manager.DelClients(client)
+	close(client.Send)
+	log.Info("unregister client success")
+}
+
+func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
+	clients = make(map[*Client]bool)
+	manager.ClientsRange(func(client *Client, value bool) (result bool) {
+		clients[client] = value
+		return true
+	})
+	return
+}
+
+func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (result bool)) {
+	manager.ClientsLock.RLock()
+	defer manager.ClientsLock.RUnlock()
+	for k, v := range manager.Clients {
+		result := f(k, v)
+		if result == false {
+			return
+		}
+	}
+	return
+}
+
 func (manager *ClientManager) start() {
 	for {
 		select {
 		case conn := <-manager.Register:
+			log.Info("get client register event from channel")
 			manager.EventRegister(conn)
-
+		case conn := <-manager.Unregister:
+			log.Info("get client unregister event from channel")
+			manager.EventRegister(conn)
+		case msg := <-manager.Broadcast:
+			log.Info("get broadcast msg from channel")
+			clients := manager.GetClients()
+			for conn := range clients {
+				select {
+				case conn.Send <- msg:
+				default:
+					close(conn.Send)
+				}
+			}
 		}
-
 	}
-
 }
