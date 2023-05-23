@@ -2,6 +2,7 @@ package gows
 
 import (
 	"sync"
+	"time"
 )
 
 /**
@@ -97,4 +98,24 @@ func (manager *ClientManager) start() {
 			}
 		}
 	}
+}
+
+func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
+	if c.HeartbeatTime+heartbeatExpirationTime <= currentTime {
+		timeout = true
+	}
+	timeout = false
+	return timeout
+}
+
+func ClearTimeoutConnections() {
+	currentTime := uint64(time.Now().Unix())
+	clients := clientManager.GetClients()
+	for client := range clients {
+		if client.IsHeartbeatTimeout(currentTime) {
+			log.Warn("Connection %s is timeout, close it", client)
+			client.Socket.Close()
+		}
+	}
+
 }
