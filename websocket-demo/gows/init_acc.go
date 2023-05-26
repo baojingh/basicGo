@@ -20,8 +20,9 @@ var (
 func StartWebSocket() {
 	http.HandleFunc("/acc", wspage)
 	go clientManager.start()
-	_ = http.ListenAndServe(":8081", nil)
-
+	port := ":8081"
+	log.Infof("start websocket service in port %s", port)
+	_ = http.ListenAndServe(port, nil)
 }
 
 func wspage(w http.ResponseWriter, req *http.Request) {

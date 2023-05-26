@@ -1,7 +1,6 @@
-app:
-  logFile: log/gin.log
-  webSocketPort: 8089
-  webSocketUrl:  127.0.0.1:8089
+web:
+  webSocketPort: 8081
+  webSocketHost:  127.0.0.1
 
 
 redis:

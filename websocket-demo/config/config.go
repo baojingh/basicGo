@@ -1,5 +1,10 @@
 package config
 
+import (
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+)
+
 /**
   @Author   : bob
   @Datetime : 2023-05-23 下午 10:22
@@ -7,19 +12,28 @@ package config
   @Desc     :
 */
 
-import (
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
-)
+type WebConfig struct {
+	WebSocketHost string `yaml:"webSocketHost"`
+	WebSocketPort string `yaml:"webSocketPort"`
+}
+
+type AppConfig struct {
+	WebConfigInfo WebConfig `yaml:"web"`
+}
+
+var AppConfigInfo AppConfig
 
 func init() {
-	viper.SetConfigName("config/app")
-	viper.AddConfigurationPath(".")
+	viper.SetConfigName("websocket-demo/config/app.yaml")
 	err := viper.ReadInConfig()
-	if err {
+	if err != nil {
 		log.Error("fail to read config file, ", err)
 		return
 	}
-	log.Infof("app.webSocketPort is %s", viper.Get("app.webSocketPort"))
+	err = viper.Unmarshal(&AppConfigInfo)
+	if err != nil {
+		log.Error("fail to get config object, ", err)
+	}
+	log.Infof("get config info success, %s", AppConfigInfo)
 
 }

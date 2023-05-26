@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/sirupsen/logrus v1.9.0
+	github.com/spf13/viper v1.15.0
 	github.com/stretchr/testify v1.8.2
 	github.com/urfave/cli v1.22.12
 	gorm.io/driver/mysql v1.5.0
@@ -24,7 +25,6 @@ require (
 	github.com/go-playground/validator/v10 v10.11.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
@@ -43,7 +43,6 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.15.0 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.9 // indirect
