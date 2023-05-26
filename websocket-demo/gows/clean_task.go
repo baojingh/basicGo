@@ -1,7 +1,6 @@
-package task
+package gows
 
 import (
-	"basicGo/websocket-demo/gows"
 	"time"
 )
 
@@ -19,7 +18,7 @@ func InitTask() {
 
 func cleanConnection(param interface{}) (result bool) {
 	result = true
-	gows.ClearTimeoutConnections()
+	ClearTimeoutConnections()
 	return
 
 }

@@ -2,6 +2,7 @@ package gows
 
 import (
 	"github.com/gorilla/websocket"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -16,6 +17,16 @@ import (
 var (
 	clientManager = NewClientManager()
 )
+
+func init() {
+	log.SetFormatter(&log.TextFormatter{
+		TimestampFormat:           "2006-01-02 15:04:05",
+		ForceColors:               true,
+		EnvironmentOverrideColors: true,
+		FullTimestamp:             true,
+		DisableLevelTruncation:    true,
+	})
+}
 
 func StartWebSocket() {
 	http.HandleFunc("/acc", wspage)

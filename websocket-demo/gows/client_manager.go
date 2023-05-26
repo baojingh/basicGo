@@ -1,6 +1,7 @@
 package gows
 
 import (
+	log "github.com/sirupsen/logrus"
 	"sync"
 	"time"
 )
@@ -20,6 +21,16 @@ type ClientManager struct {
 	Broadcast   chan []byte
 }
 
+func init() {
+	log.SetFormatter(&log.TextFormatter{
+		TimestampFormat:           "2006-01-02 15:04:05",
+		ForceColors:               true,
+		EnvironmentOverrideColors: true,
+		FullTimestamp:             true,
+		DisableLevelTruncation:    true,
+	})
+}
+
 func NewClientManager() (clientManager *ClientManager) {
 	clientManager = &ClientManager{
 		Clients:    make(map[*Client]bool),
@@ -28,6 +39,29 @@ func NewClientManager() (clientManager *ClientManager) {
 		Broadcast:  make(chan []byte, 1000),
 	}
 	return clientManager
+}
+
+func (manager *ClientManager) start() {
+	for {
+		select {
+		case conn := <-manager.Register:
+			log.Info("get client register event from channel")
+			manager.EventRegister(conn)
+		case conn := <-manager.Unregister:
+			log.Info("get client unregister event from channel")
+			manager.EventUnregister(conn)
+		case msg := <-manager.Broadcast:
+			log.Info("get broadcast msg from channel")
+			clients := manager.GetClients()
+			for conn := range clients {
+				select {
+				case conn.Send <- msg:
+				default:
+					close(conn.Send)
+				}
+			}
+		}
+	}
 }
 
 func (manager *ClientManager) AddClients(client *Client) {
@@ -75,29 +109,6 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 		}
 	}
 	return
-}
-
-func (manager *ClientManager) start() {
-	for {
-		select {
-		case conn := <-manager.Register:
-			log.Info("get client register event from channel")
-			manager.EventRegister(conn)
-		case conn := <-manager.Unregister:
-			log.Info("get client unregister event from channel")
-			manager.EventRegister(conn)
-		case msg := <-manager.Broadcast:
-			log.Info("get broadcast msg from channel")
-			clients := manager.GetClients()
-			for conn := range clients {
-				select {
-				case conn.Send <- msg:
-				default:
-					close(conn.Send)
-				}
-			}
-		}
-	}
 }
 
 func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {

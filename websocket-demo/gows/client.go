@@ -2,6 +2,7 @@ package gows
 
 import (
 	"github.com/gorilla/websocket"
+	log "github.com/sirupsen/logrus"
 )
 
 /**
@@ -39,6 +40,16 @@ type Client struct {
 
 	// 登录时间 登录以后才有
 	LoginTime uint64
+}
+
+func init() {
+	log.SetFormatter(&log.TextFormatter{
+		TimestampFormat:           "2006-01-02 15:04:05",
+		ForceColors:               true,
+		EnvironmentOverrideColors: true,
+		FullTimestamp:             true,
+		DisableLevelTruncation:    true,
+	})
 }
 
 func NewClient(addr string, socket *websocket.Conn, firstTime uint64) (client *Client) {
