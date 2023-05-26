@@ -13,6 +13,8 @@ import (
   @Desc     :
 */
 
+// 多协程读写map，需要加锁。
+// Clients
 type ClientManager struct {
 	Clients     map[*Client]bool
 	ClientsLock sync.RWMutex
