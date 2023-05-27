@@ -101,6 +101,11 @@ func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
 	return
 }
 
+func (manager *ClientManager) GetClientsLen() int {
+	len := len(manager.Clients)
+	return len
+}
+
 func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (result bool)) {
 	manager.ClientsLock.RLock()
 	defer manager.ClientsLock.RUnlock()
@@ -130,5 +135,13 @@ func ClearTimeoutConnections() {
 			client.Socket.Close()
 		}
 	}
+
+}
+
+func GetManagerInfo(isDebug string) (managerInfo map[string]interface{}) {
+	namagerInfo = make(map[string]interface{})
+	managerInfo["clientsLen"] = clientManager.GetClientsLen()
+
+	return managerInfo
 
 }
