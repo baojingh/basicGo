@@ -2,6 +2,7 @@ package gows
 
 import (
 	log "github.com/sirupsen/logrus"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -138,10 +139,14 @@ func ClearTimeoutConnections() {
 
 }
 
-func GetManagerInfo(isDebug string) (managerInfo map[string]interface{}) {
-	namagerInfo = make(map[string]interface{})
+func (manager *ClientManager) GetManagerInfo(isDebug string) (managerInfo map[string]interface{}) {
+	managerInfo = make(map[string]interface{})
 	managerInfo["clientsLen"] = clientManager.GetClientsLen()
-
+	managerInfo["chanRegisterLen"] = len(clientManager.Register)
+	managerInfo["chanUnregisterLen"] = len(clientManager.Unregister)
+	managerInfo["chanBroadcastLen"] = len(clientManager.Broadcast)
+	managerInfo["numGoroutine"] = runtime.NumGoroutine()
+	managerInfo["numCPU"] = runtime.NumCPU()
 	return managerInfo
 
 }

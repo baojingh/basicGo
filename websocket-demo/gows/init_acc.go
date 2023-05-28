@@ -1,6 +1,7 @@
 package gows
 
 import (
+	"encoding/json"
 	"github.com/gorilla/websocket"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -29,11 +30,19 @@ func init() {
 }
 
 func StartWebSocket() {
+	http.HandleFunc("/metrics", metrics)
 	http.HandleFunc("/acc", wspage)
 	go clientManager.start()
 	port := ":8081"
 	log.Infof("start websocket service in port %s", port)
 	_ = http.ListenAndServe(port, nil)
+}
+
+func metrics(w http.ResponseWriter, req *http.Request) {
+	managerInfo := clientManager.GetManagerInfo("true")
+	infoByte := map2Byte(managerInfo)
+	w.Write(infoByte)
+	log.Infof("monitor client manager, %s", string(infoByte))
 }
 
 func wspage(w http.ResponseWriter, req *http.Request) {
@@ -61,4 +70,10 @@ func wspage(w http.ResponseWriter, req *http.Request) {
 
 	clientManager.Register <- client
 	log.Info("client is registered success...")
+}
+
+func map2Byte(mapTmp map[string]interface{}) []byte {
+	str, _ := json.Marshal(mapTmp)
+	return str
+
 }
