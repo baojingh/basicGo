@@ -119,14 +119,8 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 	return
 }
 
-func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
-	if c.HeartbeatTime+heartbeatExpirationTime <= currentTime {
-		timeout = true
-	}
-	timeout = false
-	return timeout
-}
-
+// ClearTimeoutConnections 没有心跳，就会将链接关闭
+// 没有发送数据；
 func ClearTimeoutConnections() {
 	currentTime := uint64(time.Now().Unix())
 	clients := clientManager.GetClients()

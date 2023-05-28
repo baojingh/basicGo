@@ -111,3 +111,11 @@ func (c *Client) SendMsg(msg []byte) {
 func (c *Client) close() {
 	close(c.Send)
 }
+
+func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
+	if c.HeartbeatTime+heartbeatExpirationTime <= currentTime {
+		timeout = true
+	}
+	timeout = false
+	return timeout
+}

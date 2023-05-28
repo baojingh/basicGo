@@ -32,17 +32,11 @@ func init() {
 func StartWebSocket() {
 	http.HandleFunc("/metrics", metrics)
 	http.HandleFunc("/acc", wspage)
+	http.HandleFunc("/heart", heartBeat)
 	go clientManager.start()
 	port := ":8081"
 	log.Infof("start websocket service in port %s", port)
 	_ = http.ListenAndServe(port, nil)
-}
-
-func metrics(w http.ResponseWriter, req *http.Request) {
-	managerInfo := clientManager.GetManagerInfo("true")
-	infoByte := map2Byte(managerInfo)
-	w.Write(infoByte)
-	log.Infof("monitor client manager, %s", string(infoByte))
 }
 
 func wspage(w http.ResponseWriter, req *http.Request) {
@@ -76,4 +70,20 @@ func map2Byte(mapTmp map[string]interface{}) []byte {
 	str, _ := json.Marshal(mapTmp)
 	return str
 
+}
+
+func metrics(w http.ResponseWriter, req *http.Request) {
+	managerInfo := clientManager.GetManagerInfo("true")
+	infoByte := map2Byte(managerInfo)
+	w.Write(infoByte)
+	log.Infof("monitor client manager, %s", string(infoByte))
+}
+
+func heartBeat(w http.ResponseWriter, req *http.Request) {
+	currentTime := uint64(time.Now().Unix())
+
+	managerInfo := clientManager.GetManagerInfo("true")
+	infoByte := map2Byte(managerInfo)
+	w.Write(infoByte)
+	log.Infof("monitor client manager, %s", string(infoByte))
 }
