@@ -2,7 +2,6 @@ package chain
 
 import (
 	"fmt"
-	"strings"
 )
 
 /**
@@ -35,29 +34,4 @@ func (c *SensitiveWordFilterChain) StartFilter(content string) bool {
 		}
 	}
 	return false
-}
-
-// AdSensitiveFilter 判断是否有广告敏感词
-type AdSensitiveFilter struct{}
-
-func (f *AdSensitiveFilter) Filter(content string) bool {
-	// 执行判断逻辑
-	isContaine := strings.Contains(content, "ad")
-	return isContaine
-}
-
-// PoliticalSensitiveFilter 判断是否有政治敏感词
-type PoliticalSensitiveFilter struct{}
-
-func (f *PoliticalSensitiveFilter) Filter(content string) bool {
-	isContaine := strings.Contains(content, "political")
-	return isContaine
-}
-
-// ForceSensitiveFilter 判断是否有暴力敏感词
-type ForceSensitiveFilter struct{}
-
-func (f *ForceSensitiveFilter) Filter(content string) bool {
-	isContaine := strings.Contains(content, "force")
-	return isContaine
 }
