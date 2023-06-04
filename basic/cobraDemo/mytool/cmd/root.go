@@ -1,6 +1,9 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"github.com/spf13/cobra"
+)
 
 /**
   @Author   : bob
@@ -12,8 +15,12 @@ import "github.com/spf13/cobra"
 var rootCmd = &cobra.Command{
 	Use:   "greet",
 	Short: "this is a greet tool with cobra",
+	Long:  `this is a long description for mytool.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		_ = fmt.Errorf("unrecognized command")
+	},
 }
 
 func Execute() {
-	cobra.CheckErr(rootCmd.Execute())
+	_ = rootCmd.Execute()
 }
