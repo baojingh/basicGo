@@ -12,10 +12,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var monitorPath = ""
+var monitorPath = "basic/file-detector/"
 
 func main() {
 	watcher, err := fsnotify.NewWatcher()
+	log.Info("watcher is created success, ", watcher.Events)
+	defer watcher.Close()
+
+	doneChan := make(chan bool)
+
 	if err != nil {
 		log.Error("cannot create watcher ", err)
 		return
@@ -23,20 +28,19 @@ func main() {
 
 	go func() {
 		for true {
+			log.Info("in loop")
 			select {
 			case event, _ := <-watcher.Events:
-				log.Info("some", event.Name)
-			case err, ok := <-watcher.Errors:
-				if !ok {
-					return
-				}
+				log.Infof("some, %s, %s", event, event.Name)
+			case err, _ := <-watcher.Errors:
 				log.Info("fail to monitor path", err)
-
 			}
-
 		}
 	}()
 
-	watcher.Add(monitorPath)
+	_ = watcher.Add(monitorPath)
+	log.Info("path is added ", watcher.WatchList())
 
+	<-doneChan
+	log.Info("exit the process")
 }
