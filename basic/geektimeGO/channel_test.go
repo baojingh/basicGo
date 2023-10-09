@@ -47,3 +47,17 @@ func TestChannel3(t *testing.T) {
 		}
 	}()
 }
+
+// 给channel塞入一个值，是否可以支持取两次？
+func TestChannel4(t *testing.T) {
+
+	ch := make(chan int, 1)
+
+	go func() {
+		ch <- 123 // 将值123发送到通道ch
+	}()
+
+	val1 := <-ch // 第一次接收值
+	fmt.Println("第一次接收到的值:", val1)
+
+}
