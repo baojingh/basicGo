@@ -18,7 +18,7 @@ func UserSave(context *gin.Context) {
 func UserSaveByQuery(context *gin.Context) {
 	username := context.Query("name")
 	age := context.DefaultQuery("age", "33")
-	fmt.Println(username, age)
+	fmt.Println(username, ae)
 	context.String(http.StatusOK, "saved")
 }
 

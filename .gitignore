@@ -6,3 +6,4 @@ profiles_settings.xml
 .idea/*
 .idea
 *.exe
+*.log
