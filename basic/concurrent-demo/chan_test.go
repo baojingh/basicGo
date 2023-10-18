@@ -28,5 +28,13 @@ func producer(statsChan chan int) {
 }
 
 func consumer(statsChan chan int) {
+	for true {
+		select {
+		case val := <-statsChan:
+			fmt.Printf("%d", val)
+		default:
+
+		}
+	}
 
 }
