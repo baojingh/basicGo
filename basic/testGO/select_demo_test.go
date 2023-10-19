@@ -101,3 +101,50 @@ func TestTimeoutDemo(t *testing.T) {
 	log.Info("main finished")
 
 }
+
+// select的对应的多个case都满足条件，select会随机执行
+// 会不会有的case永远不会被执行到呢？
+
+/*
+*
+ch1: 497, ch2: 503
+ch1: 476, ch2: 524
+ch1: 495, ch2: 505
+ch1: 489, ch2: 511
+ch1: 511, ch2: 489
+ch1: 487, ch2: 513
+ch1: 515, ch2: 485
+ch1: 506, ch2: 494
+ch1: 495, ch2: 505
+ch1: 476, ch2: 524
+*/
+func TestSelectRandomCase(t *testing.T) {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+	countMap := map[string]int{"ch1": 0, "ch2": 0}
+	loopCnt := 1000
+
+	for k := 0; k < 10; k++ {
+		for i := 0; i < loopCnt; i++ {
+			go func() {
+				ch1 <- 1
+			}()
+			go func() {
+				ch2 <- 2
+			}()
+
+			select {
+			case <-ch1:
+				val := countMap["ch1"]
+				val++
+				countMap["ch1"] = val
+			case <-ch2:
+				val := countMap["ch2"]
+				val++
+				countMap["ch2"] = val
+			}
+		}
+		fmt.Printf("ch1: %d, ch2: %d\n", countMap["ch1"], countMap["ch2"])
+		countMap = map[string]int{"ch1": 0, "ch2": 0}
+	}
+}

@@ -14,7 +14,7 @@ import (
   @Description:
 */
 
-func TestFunc(t *testing.T) {
+func TestFunc1(t *testing.T) {
 	statsChan := make(chan int, 10)
 	var wg sync.WaitGroup
 	wg.Add(1)
