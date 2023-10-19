@@ -12,6 +12,7 @@ import (
 */
 
 func TestPointer1(t *testing.T) {
+
 	ty := new(int)
 	println(ty)
 	println(*ty)
@@ -27,6 +28,13 @@ func TestPointer1(t *testing.T) {
 
 	b := 3
 	p := &b
+	// this action is not allowed
+	// pointer cannot use operators such as +-*/
+	//p++
+
+	// (*p)++ and the result is 4
+	*p++
+
 	double2(p)
 	fmt.Printf("double2 value %d, %d\n", *p, b)
 }
