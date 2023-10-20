@@ -27,4 +27,8 @@ func TestStructDemo(t *testing.T) {
 	fmt.Println(stu1)
 	fmt.Println(stu2)
 	fmt.Println(*stu3)
+
+	s1 := student{}
+	fmt.Printf("%d, %s\n", s1.id, s1.name)
+
 }
