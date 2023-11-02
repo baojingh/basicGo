@@ -50,3 +50,12 @@ func TestDefer(t *testing.T) {
 	fmt.Println("done**********")
 
 }
+
+func TestDefer2(t *testing.T) {
+
+}
+
+func return2() int {
+	defer Clear()
+	return 2
+}
