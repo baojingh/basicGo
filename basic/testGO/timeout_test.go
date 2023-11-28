@@ -14,6 +14,10 @@ import (
 */
 
 func TestTimeOut(t *testing.T) {
+	call()
+}
+
+func call() {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	ch := make(chan int)
@@ -29,7 +33,9 @@ func TestTimeOut(t *testing.T) {
 	select {
 	case <-ctx.Done():
 		fmt.Println("操作已超时，退出")
+		return
 	case val := <-ch:
 		println("get val ", val)
+		return
 	}
 }
