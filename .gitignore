@@ -35,3 +35,4 @@ profiles_settings.xml
 # the binary executible file mdocker
 mdocker
 .pprof
+http-server/http-server
