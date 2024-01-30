@@ -27,9 +27,7 @@ func ied(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error reading request body",
 				http.StatusInternalServerError)
 		}
-		results = append(results, string(body))
-
-		fmt.Fprint(w, "POST done")
+		fmt.Println(string(body))
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
