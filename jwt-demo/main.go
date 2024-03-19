@@ -43,6 +43,11 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+type Res struct {
+	Status int
+	Data   string
+}
+
 // Create a struct that will be encoded to a JWT.
 // We add jwt.RegisteredClaims as an embedded type, to provide fields like expiry time
 type Claims struct {
@@ -92,7 +97,15 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 	c, err := r.Cookie("token")
 	if err != nil {
 		if err == http.ErrNoCookie {
+			jsonData, err := json.Marshal(Res{
+				Status: 403,
+				Data:   "no cookie",
+			})
+			if err != nil {
+				return
+			}
 			w.WriteHeader(http.StatusUnauthorized)
+			w.Write(jsonData)
 			return
 		}
 
