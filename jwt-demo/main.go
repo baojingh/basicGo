@@ -194,6 +194,13 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 	// (END) The code until this point is the same as the first part of the `Welcome` route
 
+	// 检查是否需要刷新 JWT：
+	// 函数接着检查当前 JWT 的过期时间（ExpiresAt）。如果距离过期时间还有超过 30 秒，则不会为其生成新的 JWT，而是返回错误的状态码。
+	// 这是为了防止频繁地刷新 JWT，确保 JWT 在短时间内仍然有效。
+
+	// 生成新的 JWT：
+	// 如果满足刷新条件（即 JWT 即将过期，但还有不到 30 秒的时间），函数会创建一个新的 JWT。新 JWT 的有效期设置为当前时间之后的 5 分钟。
+
 	// We ensure that a new token is not issued until enough time has elapsed
 	// In this case, a new token will only be issued if the old token is within
 	// 30 seconds of expiry. Otherwise, return a bad request status
