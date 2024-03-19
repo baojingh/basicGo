@@ -11,6 +11,16 @@ https://github.com/link1st/gowebsocket
 go mod init backend-go
 ```
 
+### create module
+```
+go work init
+```
+
+### add module
+```
+go work use agent-client/  agent-server/ agentctl/
+```
+
 
 ### 新增依赖
 1. 将需要的依赖添加到import中
