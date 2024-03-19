@@ -60,6 +60,14 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	// Get the JSON body and decode into credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
+		jsonData, err := json.Marshal(Res{
+			Status: 400,
+			Data:   "bad req",
+		})
+		if err != nil {
+			return
+		}
+		w.Write(jsonData)
 		// If the structure of the body is wrong, return an HTTP error
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -67,6 +75,14 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 
 	expectedPassword, ok := users[creds.Username]
 	if !ok || expectedPassword != creds.Password {
+		jsonData, err := json.Marshal(Res{
+			Status: 403,
+			Data:   "unauthorized",
+		})
+		if err != nil {
+			return
+		}
+		w.Write(jsonData)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
@@ -82,6 +98,11 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(jwtKey)
 	if err != nil {
+		jsonData, _ := json.Marshal(Res{
+			Status: 500,
+			Data:   "internal err",
+		})
+		w.Write(jsonData)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -104,8 +125,9 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				return
 			}
-			w.WriteHeader(http.StatusUnauthorized)
 			w.Write(jsonData)
+
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
@@ -123,6 +145,7 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 	// if the token is invalid (if it has expired according to the expiry time we set on sign in),
 	// or if the signature does not match
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(t *jwt.Token) (any, error) {
+		//  jwtKey is the server secret
 		return jwtKey, nil
 	})
 	if err != nil {
