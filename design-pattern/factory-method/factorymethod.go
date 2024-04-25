@@ -13,25 +13,18 @@ type RuleParser interface {
 	Parse(data []byte)
 }
 
-type JsonRuleParser struct {
-}
-
-func (j *JsonRuleParser) Parse(data []byte) {
-	fmt.Println("implement json parser")
-}
-
-type YamlRuleParser struct {
-}
-
-func (j *YamlRuleParser) Parse(data []byte) {
-	fmt.Println("implement yaml parser")
-}
-
 type RuleParserFactory interface {
 	CreateParser() RuleParser
 }
 
 type JsonRuleParserFactory struct {
+}
+
+type JsonRuleParser struct {
+}
+
+func (j *JsonRuleParser) Parse(data []byte) {
+	fmt.Println("implement json parser")
 }
 
 func (j *JsonRuleParserFactory) CreateParser() RuleParser {
@@ -40,6 +33,13 @@ func (j *JsonRuleParserFactory) CreateParser() RuleParser {
 }
 
 type YamlRuleParserFactory struct {
+}
+
+type YamlRuleParser struct {
+}
+
+func (j *YamlRuleParser) Parse(data []byte) {
+	fmt.Println("implement yaml parser")
 }
 
 func (j *YamlRuleParserFactory) CreateParser() RuleParser {
