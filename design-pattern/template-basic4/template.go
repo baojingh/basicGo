@@ -44,6 +44,8 @@ func (b *BankBusinessExecutor) ExecuteBankBusiness() {
 	b.handler.Commentate()
 }
 
+//============================================================================
+
 type TemplateBusinessHandler struct {
 }
 
