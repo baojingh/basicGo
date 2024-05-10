@@ -43,29 +43,32 @@ func (b *BankBusinessExecutor) ExecuteBankBusiness() {
 	b.handler.HandleBusiness()
 	b.handler.Commentate()
 }
+func NewBankBusinessExecutor(businessHandler BankBusinessHandler) *BankBusinessExecutor {
+	return &BankBusinessExecutor{handler: businessHandler}
+}
 
 //============================================================================
 
-type TemplateBusinessHandler struct {
+type DefaultBusinessHandler struct {
 }
 
-func (*TemplateBusinessHandler) TakeRowNumber() {
+func (*DefaultBusinessHandler) TakeRowNumber() {
 	fmt.Println("请拿好您的取件码：" + strconv.Itoa(rand.Intn(100)) +
 		" ，注意排队情况，过号后顺延三个安排")
 }
 
-func (dbh *TemplateBusinessHandler) WaitInHead() {
+func (dbh *DefaultBusinessHandler) WaitInHead() {
 	fmt.Println("排队等号中...")
 	time.Sleep(5 * time.Second)
 	fmt.Println("请去窗口xxx...")
 }
 
-func (*TemplateBusinessHandler) Commentate() {
+func (*DefaultBusinessHandler) Commentate() {
 
 	fmt.Println("请对我的服务作出评价，满意请按0，满意请按0，(～￣▽￣)～")
 }
 
-func (*TemplateBusinessHandler) CheckVipIdentity() bool {
+func (*DefaultBusinessHandler) CheckVipIdentity() bool {
 	// 留给具体实现类实现
 	return false
 }
@@ -73,7 +76,7 @@ func (*TemplateBusinessHandler) CheckVipIdentity() bool {
 // =====================================================================================================================
 
 type DepositBusinessHandler struct {
-	*TemplateBusinessHandler
+	*DefaultBusinessHandler
 	userVip bool
 }
 
@@ -83,8 +86,4 @@ func (*DepositBusinessHandler) HandleBusiness() {
 
 func (dh *DepositBusinessHandler) CheckVipIdentity() bool {
 	return dh.userVip
-}
-
-func NewBankBusinessExecutor(businessHandler BankBusinessHandler) *BankBusinessExecutor {
-	return &BankBusinessExecutor{handler: businessHandler}
 }
