@@ -9,7 +9,7 @@ import "testing"
 */
 
 func TestHello(t *testing.T) {
-	dh := &DepositBusinessHandler{userVip: false}
-	bbe := NewBankBusinessExecutor(dh)
+	dh := &DepositExecutor{userVip: false}
+	bbe := NewBankExecutor(dh)
 	bbe.ExecuteBankBusiness()
 }
